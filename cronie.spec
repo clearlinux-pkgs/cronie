@@ -4,7 +4,7 @@
 #
 Name     : cronie
 Version  : 1.5.4.final
-Release  : 3
+Release  : 4
 URL      : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
 Source0  : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
 Summary  : No detailed summary available
