@@ -4,7 +4,7 @@
 #
 Name     : cronie
 Version  : 1.5.4.final
-Release  : 9
+Release  : 10
 URL      : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
 Source0  : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
 Summary  : No detailed summary available
@@ -60,7 +60,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1553297576
+export SOURCE_DATE_EPOCH=1553347787
 export LDFLAGS="${LDFLAGS} -fno-lto"
 %autogen --disable-static
 make  %{?_smp_mflags}
@@ -73,7 +73,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1553297576
+export SOURCE_DATE_EPOCH=1553347787
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cronie
 cp COPYING.anacron %{buildroot}/usr/share/package-licenses/cronie/COPYING.anacron
