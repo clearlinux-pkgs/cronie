@@ -4,33 +4,29 @@
 #
 Name     : cronie
 Version  : 1.5.4.final
-Release  : 17
+Release  : 18
 URL      : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
 Source0  : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
+Source1  : cronie.service
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: cronie-bin = %{version}-%{release}
 Requires: cronie-license = %{version}-%{release}
 Requires: cronie-man = %{version}-%{release}
-BuildRequires : buildreq-qmake
+Requires: cronie-services = %{version}-%{release}
 
 %description
-What is Anacron ?
------------------
-Anacron is a periodic command scheduler.  It executes commands at
-intervals specified in days.  Unlike cron, it does not assume that the
-system is running continuously.  It can therefore be used to control
-the execution of daily, weekly and monthly jobs (or anything with a
-period of n days), on systems that don't run 24 hours a day.  When
-installed and configured properly, Anacron will make sure that the
-commands are run at the specified intervals as closely as
-machine-uptime permits.
+17. January 2008	mmaslano (at) redhat (dot) com
+Rename the fork on cronie. The source code could be found here:
+http://mmaslano.fedorapeople.org/cronie/ or git archive here:
+git://git.fedorahosted.org/git/cronie.git
 
 %package bin
 Summary: bin components for the cronie package.
 Group: Binaries
 Requires: cronie-license = %{version}-%{release}
+Requires: cronie-services = %{version}-%{release}
 
 %description bin
 bin components for the cronie package.
@@ -52,6 +48,14 @@ Group: Default
 man components for the cronie package.
 
 
+%package services
+Summary: services components for the cronie package.
+Group: Systemd services
+
+%description services
+services components for the cronie package.
+
+
 %prep
 %setup -q -n cronie-cronie-1.5.4-final
 
@@ -60,7 +64,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1553608296
+export SOURCE_DATE_EPOCH=1557338574
 export LDFLAGS="${LDFLAGS} -fno-lto"
 %autogen --disable-static
 make  %{?_smp_mflags}
@@ -73,11 +77,13 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1553608296
+export SOURCE_DATE_EPOCH=1557338574
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cronie
 cp COPYING.anacron %{buildroot}/usr/share/package-licenses/cronie/COPYING.anacron
 %make_install
+mkdir -p %{buildroot}/usr/lib/systemd/system
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/cronie.service
 
 %files
 %defattr(-,root,root,-)
@@ -99,3 +105,7 @@ cp COPYING.anacron %{buildroot}/usr/share/package-licenses/cronie/COPYING.anacro
 /usr/share/man/man5/crontab.5
 /usr/share/man/man8/cron.8
 /usr/share/man/man8/crond.8
+
+%files services
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/cronie.service
