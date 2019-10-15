@@ -4,7 +4,7 @@
 #
 Name     : cronie
 Version  : 1.5.4.final
-Release  : 19
+Release  : 20
 URL      : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
 Source0  : https://github.com/cronie-crond/cronie/archive/cronie-1.5.4-final.tar.gz
 Source1  : cronie.service
@@ -15,6 +15,7 @@ Requires: cronie-bin = %{version}-%{release}
 Requires: cronie-license = %{version}-%{release}
 Requires: cronie-man = %{version}-%{release}
 Requires: cronie-services = %{version}-%{release}
+Patch1: 0001-Don-t-complain-about-missing-etc-cron.d.patch
 
 %description
 17. January 2008	mmaslano (at) redhat (dot) com
@@ -58,31 +59,35 @@ services components for the cronie package.
 
 %prep
 %setup -q -n cronie-cronie-1.5.4-final
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1558731838
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1571158354
 export GCC_IGNORE_WERROR=1
-export LDFLAGS="${LDFLAGS} -fno-lto"
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 %autogen --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1558731838
+export SOURCE_DATE_EPOCH=1571158354
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cronie
-cp COPYING %{buildroot}/usr/share/package-licenses/cronie/COPYING
-cp COPYING.anacron %{buildroot}/usr/share/package-licenses/cronie/COPYING.anacron
+cp %{_builddir}/cronie-cronie-1.5.4-final/COPYING %{buildroot}/usr/share/package-licenses/cronie/6261e3b944ea705753eeb12c7e6fb0ef3ba42bee
+cp %{_builddir}/cronie-cronie-1.5.4-final/COPYING.anacron %{buildroot}/usr/share/package-licenses/cronie/4cc77b90af91e615a64ae04893fdffa7939db84c
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/cronie.service
@@ -98,8 +103,8 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/cronie.service
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/cronie/COPYING
-/usr/share/package-licenses/cronie/COPYING.anacron
+/usr/share/package-licenses/cronie/4cc77b90af91e615a64ae04893fdffa7939db84c
+/usr/share/package-licenses/cronie/6261e3b944ea705753eeb12c7e6fb0ef3ba42bee
 
 %files man
 %defattr(0644,root,root,0755)

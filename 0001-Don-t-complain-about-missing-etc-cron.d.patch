@@ -1,0 +1,36 @@
+From 44ce0d55561528827482f009e7dcaf1acdf05563 Mon Sep 17 00:00:00 2001
+From: Auke Kok <auke-jan.h.kok@intel.com>
+Date: Tue, 15 Oct 2019 09:50:24 -0700
+Subject: [PATCH] Don't complain about missing /etc/cron.d/
+
+---
+ src/database.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/src/database.c b/src/database.c
+index 66609d1..c05e584 100644
+--- a/src/database.c
++++ b/src/database.c
+@@ -480,7 +480,6 @@ int load_database(cron_db * old_db) {
+ 	}
+ 
+ 	if (stat(SYS_CROND_DIR, &crond_stat) < OK) {
+-		log_it("CRON", pid, "STAT FAILED", SYS_CROND_DIR, errno);
+ 		crond_stat.st_mtime = 0;
+ 	}
+ 	else {
+@@ -529,10 +528,7 @@ int load_database(cron_db * old_db) {
+ 		process_crontab("root", NULL, SYSCRONTAB, &new_db, old_db);
+ #endif
+ 
+-	if (!(dir = opendir(SYS_CROND_DIR))) {
+-		log_it("CRON", pid, "OPENDIR FAILED", SYS_CROND_DIR, errno);
+-	}
+-	else {
++	if ((dir = opendir(SYS_CROND_DIR))) {
+ 		while (NULL != (dp = readdir(dir))) {
+ 			char tabname[NAME_MAX + 1];
+ 
+-- 
+2.23.0
+
