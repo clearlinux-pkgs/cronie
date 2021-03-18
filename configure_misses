@@ -1,16 +1,6 @@
-Configure miss: selinux/selinux.h usability
-Configure miss: selinux/selinux.h presence
 Configure miss: selinux/selinux.h
-Configure miss: sys/audit.h usability
-Configure miss: sys/audit.h presence
 Configure miss: sys/audit.h
-Configure miss: sys/stream.h usability
-Configure miss: sys/stream.h presence
 Configure miss: sys/stream.h
-Configure miss: sys/stropts.h usability
-Configure miss: sys/stropts.h presence
 Configure miss: sys/stropts.h
-Configure miss: sys/timers.h usability
-Configure miss: sys/timers.h presence
 Configure miss: sys/timers.h
 Configure miss: fchgrp
