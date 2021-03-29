@@ -1,6 +1,6 @@
+Configure miss: fchgrp
 Configure miss: selinux/selinux.h
 Configure miss: sys/audit.h
 Configure miss: sys/stream.h
 Configure miss: sys/stropts.h
 Configure miss: sys/timers.h
-Configure miss: fchgrp
