@@ -4,7 +4,7 @@
 #
 Name     : cronie
 Version  : 1.5.7
-Release  : 23
+Release  : 25
 URL      : https://github.com/cronie-crond/cronie/archive/cronie-1.5.7/cronie-1.5.7.tar.gz
 Source0  : https://github.com/cronie-crond/cronie/archive/cronie-1.5.7/cronie-1.5.7.tar.gz
 Source1  : cronie.service
@@ -15,6 +15,7 @@ Requires: cronie-bin = %{version}-%{release}
 Requires: cronie-license = %{version}-%{release}
 Requires: cronie-man = %{version}-%{release}
 Requires: cronie-services = %{version}-%{release}
+Requires: cronie-setuid = %{version}-%{release}
 Patch1: 0001-Don-t-complain-about-missing-etc-cron.d.patch
 
 %description
@@ -26,6 +27,7 @@ SELinux.
 %package bin
 Summary: bin components for the cronie package.
 Group: Binaries
+Requires: cronie-setuid = %{version}-%{release}
 Requires: cronie-license = %{version}-%{release}
 Requires: cronie-services = %{version}-%{release}
 
@@ -57,6 +59,14 @@ Group: Systemd services
 services components for the cronie package.
 
 
+%package setuid
+Summary: setuid components for the cronie package.
+Group: Default
+
+%description setuid
+setuid components for the cronie package.
+
+
 %prep
 %setup -q -n cronie-cronie-1.5.7
 cd %{_builddir}/cronie-cronie-1.5.7
@@ -67,7 +77,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1617025931
+export SOURCE_DATE_EPOCH=1643312636
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -84,7 +94,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1617025931
+export SOURCE_DATE_EPOCH=1643312636
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/cronie
 cp %{_builddir}/cronie-cronie-1.5.7/COPYING %{buildroot}/usr/share/package-licenses/cronie/6261e3b944ea705753eeb12c7e6fb0ef3ba42bee
@@ -99,7 +109,6 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/cronie.service
 
 %files bin
 %defattr(-,root,root,-)
-%attr(4755,root,cron) /usr/bin/crontab
 /usr/bin/anacron
 /usr/bin/crond
 /usr/bin/cronnext
@@ -123,3 +132,7 @@ install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/cronie.service
 %files services
 %defattr(-,root,root,-)
 /usr/lib/systemd/system/cronie.service
+
+%files setuid
+%defattr(-,root,root,-)
+%attr(4755,root,cron) /usr/bin/crontab
